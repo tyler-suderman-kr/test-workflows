@@ -9,11 +9,8 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Configure git
-        run: |
-          git config --global --replace-all user.name "$GITHUB_ACTOR"
-          git config --global --replace-all user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git fetch --tags -f
+      - name: fetch tags
+        run: git fetch --tags -f
 
       - name: Version root package
         if: ${{ steps.version-label.outputs.level != null }}

@@ -1,0 +1,19 @@
+name: "Tag Trigger"
+
+permissions:
+  actions: read
+  contents: read
+  id-token: write
+
+on:
+  push:
+    tags:
+      - "v**"
+
+jobs:
+  say-hi:
+    name: "say hi"
+    runs-on: ubuntu-latest
+    steps:
+      - name: fetch tags
+        run: git fetch --tags -f
