@@ -15,5 +15,5 @@ jobs:
     name: "say hi"
     runs-on: ubuntu-latest
     steps:
-      - name: fetch tags
-        run: git fetch --tags -f
+      - name: hi-there
+        run: echo 'hi there!'
