@@ -1,0 +1,82 @@
+name: Version NPM package
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+    paths-ignore:
+      - "package.json"
+      - "CHANGELOG.md"
+      - "README.md"
+
+jobs:
+  version-and-publish:
+    name: "Release if we have a version label"
+    if: ${{ github.event.pull_request.merged }}
+    # Runs on core engineering runners so we can publish
+    runs-on: [self-hosted, kubernetes, on-prem]
+    steps:
+      - name: Get Version Label
+        uses: actions-ecosystem/action-release-label@v1.2.0
+        id: version-label
+        with:
+          # A prefix for labels that indicate semver level ({major, minor, patch}).#
+          label_prefix: version-
+
+      - name: Temporarily disable "include administrators" branch protection
+        uses: benjefferies/branch-protection-bot@1.0.9
+        if: ${{ steps.version-label.outputs.level != null }}
+        with:
+          access_token: ${{ secrets.ADMIN_PAT || github.token }}
+          enforce_admins: false
+          branch: main
+
+      - uses: AutoModality/action-clean@v1.1.0
+
+      - uses: actions/checkout@v2
+        if: ${{ steps.version-label.outputs.level != null }}
+        with:
+          token: ${{ secrets.ADMIN_PAT || github.token }}
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+        if: ${{ steps.version-label.outputs.level != null }}
+
+      - name: Setup NPM
+        uses: ./.github/actions/setup-npm
+        if: ${{ steps.version-label.outputs.level != null }}
+        with:
+          npm-auth: ${{ secrets.NPM_AUTH }}
+
+      - name: Install top-level dependencies
+        run: npm install
+
+      - name: Install All Packages
+        run: npm run ci:all
+
+      - name: Build All Packages
+        run: npm run build
+
+      - name: Configure git
+        run: |
+          git config --global --replace-all user.name "$GITHUB_ACTOR"
+          git config --global --replace-all user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git fetch --tags -f
+
+      - name: Version root package
+        if: ${{ steps.version-label.outputs.level != null }}
+        run: npm run version:root ${{ steps.version-label.outputs.level }}
+
+      - name: Bump NPM version and push
+        id: bumpandpush
+        if: ${{ steps.version-label.outputs.level != null }}
+        run: |
+          npm run publish:all ${{ steps.version-label.outputs.level }}
+
+      - name: Enable "include administrators" branch protection
+        uses: benjefferies/branch-protection-bot@1.0.9
+        if: ${{ steps.version-label.outputs.level != null && (cancelled() || failure() || success()) }} # Force to always run this step to ensure "include administrators" is always turned back on
+        with:
+          access_token: ${{ secrets.ADMIN_PAT || github.token }}
+          enforce_admins: true
+          branch: main
