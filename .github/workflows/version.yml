@@ -13,8 +13,7 @@ jobs:
   version-and-publish:
     name: "Release if we have a version label"
     if: ${{ github.event.pull_request.merged }}
-    # Runs on core engineering runners so we can publish
-    runs-on: [self-hosted, kubernetes, on-prem]
+    runs-on: ubuntu-latest
     steps:
       - name: Get Version Label
         uses: actions-ecosystem/action-release-label@v1.2.0

@@ -14,7 +14,7 @@ on:
 jobs:
   test_and_build:
     name: "Build, Test and Archive"
-    runs-on: [self-hosted, kubernetes, on-prem]
+    runs-on: ubuntu-latest
     container:
       image: "${{ vars.GH_WORKFLOW_DOCKER_IMAGE }}:${{ vars.GH_WORKFLOW_DOCKER_IMAGE_VERSION }}"
       credentials:
