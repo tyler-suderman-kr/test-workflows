@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 16
 
-      # - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
+      - run: git config --global url."https://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@github.com/".insteadOf ssh://git@github.com/
 
       - name: Install top-level dependencies
         run: npm install
