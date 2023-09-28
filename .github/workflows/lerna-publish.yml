@@ -23,6 +23,8 @@ jobs:
 
       # - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
 
+      - run: git config --global url."https://github-actions:${{ secrets.TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+
       - name: Install top-level dependencies
         run: npm install
 
