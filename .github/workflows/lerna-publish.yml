@@ -13,6 +13,13 @@ jobs:
     name: "Version and Push"
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Run linting rules and tests
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Install top-level dependencies
         run: npm install
 
