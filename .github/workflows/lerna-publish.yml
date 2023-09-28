@@ -13,7 +13,18 @@ jobs:
     name: "Version and Push"
     runs-on: ubuntu-latest
     steps:
-      - run: npm i
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      # - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
+
+      - name: Install top-level dependencies
+        run: npm install
 
       - name: Build All Packages
         run: npm run build
