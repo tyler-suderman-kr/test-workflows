@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Install top-level dependencies
         run: npm install
-        with:
-          working-director: "./"
 
       - name: Build All Packages
         run: npm run build
