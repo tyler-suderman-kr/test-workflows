@@ -1,0 +1,27 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "## adding things",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version:root": "npm version --no-git-tag-version --",
+    "postversion": "git add package.json package-lock.json && git commit -m \"Bump root package version to v$npm_package_version [skip ci]\"",
+    "publish:all": "func() { lerna publish --force-publish --ignore-scripts \"$1\" --yes; }; func",
+    "build": "lerna run --parallel build"
+  },
+  "devDependencies": {
+    "lerna": "^5.1.1",
+    "npm": "^8.15.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-suderman-kr/test-workflows.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tyler-suderman-kr/test-workflows/issues"
+  },
+  "homepage": "https://github.com/tyler-suderman-kr/test-workflows#readme"
+}

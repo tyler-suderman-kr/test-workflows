@@ -1,0 +1,32 @@
+name: "Publish"
+
+permissions:
+  actions: read
+  contents: read
+  id-token: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  version-and-push:
+    name: "Version and Push"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install top-level dependencies
+        run: npm install
+
+      - name: Build All Packages
+        run: npm run build
+
+      - name: Version root package
+        if: ${{ steps.version-label.outputs.level != null }}
+        run: npm run version:root ${{ steps.version-label.outputs.level }}
+
+      - name: Bump NPM version and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADMIN_PAT }}
+        id: bumpandpush
+        if: ${{ steps.version-label.outputs.level != null }}
+        run: |
+          npm run publish:all ${{ steps.version-label.outputs.level }}
