@@ -21,9 +21,8 @@ jobs:
         with:
           node-version: 16
 
-      # - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
-
-      - run: git config --global url."https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Authenticate with GitHub package registry
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
       - name: Install top-level dependencies
         run: npm install
