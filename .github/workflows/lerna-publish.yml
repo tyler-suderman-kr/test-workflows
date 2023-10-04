@@ -19,11 +19,9 @@ jobs:
         with:
           node-version: 16
 
-      - name: Set registry
-        run: npm login --registry=https://npm.pkg.github.com
-
       - name: Authenticate with GitHub package registry
         run: |
+          echo "@tyler-suderman-kr:registry=https://npm.pkg.github.com" > ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
           echo `cat ~/.npmrc`
           echo `npm whoami`
