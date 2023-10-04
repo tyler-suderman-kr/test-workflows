@@ -24,7 +24,7 @@ jobs:
 
       - name: Authenticate with GitHub package registry
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
           echo `cat ~/.npmrc`
 
       - name: Install top-level dependencies
