@@ -13,6 +13,9 @@ jobs:
     name: "Version and Push"
     runs-on: ubuntu-latest
     steps:
+      - name: Remove user npmrc
+        run: rm -f ~/.npmrc
+
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
