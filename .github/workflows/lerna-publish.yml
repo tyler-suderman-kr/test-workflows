@@ -19,12 +19,10 @@ jobs:
         with:
           node-version: 16
 
-      - name: Authenticate with GitHub package registry
+      - name: Authenticate with private NPM package
         run: |
-          echo "@tyler-suderman-kr:registry=https://npm.pkg.github.com" > ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
           echo `cat ~/.npmrc`
-          echo `npm whoami`
 
       - name: Install top-level dependencies
         run: npm install
