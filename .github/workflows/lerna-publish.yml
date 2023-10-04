@@ -13,19 +13,20 @@ jobs:
     name: "Version and Push"
     runs-on: ubuntu-latest
     steps:
-      - name: Remove user npmrc
-        run: rm -f ~/.npmrc
-
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
           node-version: 16
 
+      - name: Set registry
+        run: npm login --registry=https://npm.pkg.github.com
+
       - name: Authenticate with GitHub package registry
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
           echo `cat ~/.npmrc`
+          echo `npm whoami`
 
       - name: Install top-level dependencies
         run: npm install
