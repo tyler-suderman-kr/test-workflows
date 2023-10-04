@@ -20,7 +20,9 @@ jobs:
           node-version: 16
 
       - name: Authenticate with GitHub package registry
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+          echo ~/.npmrc
 
       - name: Install top-level dependencies
         run: npm install
